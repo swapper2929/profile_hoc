@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <title>Hoàng Mạnh Phước | Student Profile | Avatar</title>
+  <!-- Google Fonts + Font Awesome 6 (Free) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Biến CSS cho Dark/Light Mode */
+    :root {
+      --bg-gradient-start: #fce4ec;
+      --bg-gradient-end: #ffd9e5;
+      --card-bg: rgba(255, 255, 255, 0.96);
+      --text-primary: #1e2a3e;
+      --hero-gradient-start: #b83b5e;
+      --hero-gradient-end: #e76f91;
+      --info-color: #b83b5e;
+      --link-bg: #f8fafd;
+      --link-border: #ffe0e8;
+      --link-hover-bg: white;
+      --contact-bg: #fff0f3;
+      --contact-badge-bg: white;
+      --footer-color: #b88aa0;
+      --footer-border: #ffe0e8;
+      --shadow-color: rgba(0, 0, 0, 0.3);
+      --btn-bg: rgba(255, 255, 255, 0.95);
+      --gender-bg: rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark {
+      --bg-gradient-start: #1a1a2e;
+      --bg-gradient-end: #16213e;
+      --card-bg: rgba(30, 30, 46, 0.96);
+      --text-primary: #e2e2e2;
+      --hero-gradient-start: #4a1942;
+      --hero-gradient-end: #893168;
+      --info-color: #e76f91;
+      --link-bg: #2a2a3e;
+      --link-border: #4a1942;
+      --link-hover-bg: #3a2a4e;
+      --contact-bg: #2a2a3e;
+      --contact-badge-bg: #3a2a4e;
+      --footer-color: #b88aa0;
+      --footer-border: #4a1942;
+      --shadow-color: rgba(0, 0, 0, 0.5);
+      --btn-bg: rgba(30, 30, 46, 0.95);
+      --gender-bg: rgba(255, 255, 255, 0.15);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      color: var(--text-primary);
+      padding: 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+      transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+    }
+
+    /* Canvas cho hoa đào rơi */
+    #petalCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Nút Dark/Light Mode */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1002;
+      background: var(--btn-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(231, 111, 145, 0.3);
+      border-radius: 60px;
+      padding: 10px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.05);
+      border-color: #e76f91;
+      box-shadow: 0 6px 20px rgba(231, 111, 145, 0.3);
+    }
+
+    .theme-toggle i {
+      font-size: 1.2rem;
+      transition: transform 0.5s ease;
+    }
+
+    .theme-toggle:hover i {
+      transform: rotate(180deg);
+    }
+
+    /* Nút bật/tắt hoa đào */
+    .petal-toggle {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 1002;
+      background: var(--btn-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(231, 111, 145, 0.4);
+      border-radius: 60px;
+      padding: 12px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .petal-toggle:hover {
+      transform: scale(1.05);
+      border-color: #ffb347;
+      box-shadow: 0 6px 20px rgba(255, 179, 71, 0.3);
+    }
+
+    .petal-toggle i {
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+    }
+
+    .petal-toggle.active {
+      background: linear-gradient(135deg, #ffb347, #ff8c00);
+      color: white;
+      border-color: transparent;
+    }
+
+    .petal-toggle.active i {
+      animation: flowerRotate 0.5s ease;
+    }
+
+    @keyframes flowerRotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Main card container */
+    .profile-card {
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+      background: var(--card-bg);
+      backdrop-filter: blur(0px);
+      border-radius: 3rem;
+      box-shadow: 0 25px 45px -12px var(--shadow-color), 0 4px 12px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: cardFadeIn 0.8s ease forwards;
+    }
+
+    @keyframes cardFadeIn {
+      0% { opacity: 0; transform: scale(0.98); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .profile-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 32px 55px -15px var(--shadow-color);
+    }
+
+    /* Header / Hero section */
+    .hero {
+      background: linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
+      padding: 2rem 1.8rem 1.8rem;
+      color: white;
+      text-align: center;
+      border-bottom-left-radius: 1.8rem;
+      border-bottom-right-radius: 1.8rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Tên + tích xanh */
+    .name-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 0.3rem;
+    }
+
+    .hero h1 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #fff, #ffe0b5, #ffd966, #fff);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: textShine 3s ease infinite;
+      opacity: 0;
+      animation: textShine 3s ease infinite, fadeInItem 0.6s ease forwards 0.3s;
+      display: inline-block;
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1da1f2, #0d8bf0);
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 0.9rem;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      animation: fadeInItem 0.6s ease forwards 0.35s, verifiedGlow 2s ease infinite;
+      opacity: 0;
+    }
+
+    @keyframes verifiedGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(29, 161, 242, 0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(29, 161, 242, 0); }
+    }
+
+    .verified-badge i {
+      font-size: 0.75rem;
+    }
+
+    @keyframes textShine {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Avatar với ảnh */
+    .avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.4);
+      border: 3px solid white;
+      transition: transform 0.3s ease;
+      animation: floatAvatar 3s ease-in-out infinite, fadeInItem 0.6s ease forwards 0.2s;
+      opacity: 0;
+      overflow: hidden;
+      background: linear-gradient(145deg, #ffb347, #ff8c00);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Fallback nếu ảnh lỗi */
+    .avatar .fallback-icon {
+      font-size: 4rem;
+      color: white;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+      display: none;
+    }
+
+    .avatar img.error + .fallback-icon {
+      display: block;
+    }
+
+    .avatar img.error {
+      display: none;
+    }
+
+    @keyframes floatAvatar {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+    }
+
+    /* Gender info row */
+    .gender-info {
+      background: var(--gender-bg);
+      backdrop-filter: blur(8px);
+      border-radius: 60px;
+      padding: 0.5rem 1rem;
+      margin: 0.8rem auto 0;
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .gender-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .gender-item i {
+      font-size: 0.9rem;
+    }
+
+    .gender-item .label {
+      opacity: 0.8;
+    }
+
+    .gender-item .value {
+      font-weight: 700;
+    }
+
+    .badge-school {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      border-radius: 80px;
+      padding: 0.35rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: pulse 2s infinite, fadeInItem 0.6s ease forwards 0.1s;
+      opacity: 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+
+    .hero p {
+      font-size: 0.9rem;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards 0.5s;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 0.9;
+        transform: translateY(0);
+      }
+    }
+
+    .decrypt-container {
+      display: inline-block;
+      margin-top: 0.5rem;
+    }
+
+    .student-id {
+      font-size: 0.85rem;
+      background: rgba(0,0,0,0.35);
+      display: inline-block;
+      padding: 0.25rem 0.9rem;
+      border-radius: 40px;
+      font-weight: 500;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 1px;
+    }
+
+    /* School info row */
+    .school-info {
+      background: var(--card-bg);
+      margin: 1rem 1.5rem;
+      border-radius: 1.8rem;
+      padding: 1rem 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.8rem;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(231, 111, 145, 0.1);
+      transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--info-color);
+      transition: all 0.2s;
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+
+    .info-item:nth-child(1) { animation: slideInLeft 0.5s ease forwards 0.6s; }
+    .info-item:nth-child(2) { animation: slideInLeft 0.5s ease forwards 0.7s; }
+    .info-item:nth-child(3) { animation: slideInLeft 0.5s ease forwards 0.8s; }
+    .info-item:nth-child(4) { animation: slideInLeft 0.5s ease forwards 0.9s; }
+
+    @keyframes slideInLeft {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .info-item i {
+      font-size: 1.2rem;
+      color: #e76f91;
+      width: 24px;
+      text-align: center;
+    }
+
+    /* content & links section */
+    .content {
+      padding: 0.2rem 1.8rem 2rem 1.8rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 1.5rem 0 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-left: 4px solid #e76f91;
+      padding-left: 0.8rem;
+      color: var(--info-color);
+      opacity: 0;
+      transform: translateX(-15px);
+      animation: slideInLeft 0.5s ease forwards 1s;
+      transition: color 0.3s ease;
+    }
+
+    /* Grid links */
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 0.9rem;
+    }
+
+    .link-item {
+      background: var(--link-bg);
+      border-radius: 1.6rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid var(--link-border);
+      display: flex;
+      align-items: center;
+      padding: 0.7rem 1rem;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--text-primary);
+      font-weight: 500;
+      backdrop-filter: blur(2px);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(15px);
+    }
+
+    .link-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(231, 111, 145, 0.15), transparent);
+      transition: left 0.5s;
+    }
+
+    .link-item:hover::before {
+      left: 100%;
+    }
+
+    .link-item:hover {
+      background: var(--link-hover-bg);
+      border-color: #e76f91;
+      transform: scale(1.02);
+      box-shadow: 0 12px 18px -12px var(--shadow-color);
+    }
+
+    .link-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(125deg, var(--link-hover-bg), var(--link-bg));
+      border-radius: 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: #e76f91;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: background 0.3s ease;
+    }
+
+    .link-info {
+      flex: 1;
+    }
+
+    .link-platform {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--info-color);
+      transition: color 0.3s ease;
+    }
+
+    .link-handle {
+      font-size: 0.95rem;
+      font-weight: 700;
+      word-break: break-all;
+      color: var(--text-primary);
+      transition: color 0.3s ease;
+    }
+
+    .link-arrow {
+      opacity: 0.5;
+      transition: opacity 0.2s, transform 0.2s;
+      font-size: 1rem;
+    }
+
+    .link-item:hover .link-arrow {
+      opacity: 1;
+      transform: translateX(4px);
+      color: #e76f91;
+    }
+
+    /* Contact row */
+    .contact-row {
+      margin-top: 1.2rem;
+      background: var(--contact-bg);
+      border-radius: 1.8rem;
+      padding: 0.8rem 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      font-size: 0.85rem;
+      opacity: 0;
+      animation: fadeInItem 0.5s ease forwards 1.3s;
+      transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .contact-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--contact-badge-bg);
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: transform 0.2s, background 0.3s ease;
+      color: var(--text-primary);
+    }
+
+    .contact-badge:hover {
+      transform: scale(1.02);
+    }
+
+    .btn-copy {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #e76f91;
+      transition: 0.1s;
+      margin-left: 6px;
+    }
+
+    .btn-copy:hover {
+      color: #b83b5e;
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.7rem;
+      padding: 1rem 0.5rem 1.2rem;
+      color: var(--footer-color);
+      border-top: 1px solid var(--footer-border);
+      margin-top: 0.8rem;
+      opacity: 0;
+      animation: fadeInItem 0.5s ease forwards 1.5s;
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+
+    @keyframes fadeInItem {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 550px) {
+      body {
+        padding: 1rem;
+      }
+      .hero h1 {
+        font-size: 1.4rem;
+      }
+      .verified-badge {
+        width: 24px;
+        height: 24px;
+        font-size: 0.7rem;
+      }
+      .avatar {
+        width: 85px;
+        height: 85px;
+      }
+      .links-grid {
+        grid-template-columns: 1fr;
+      }
+      .content {
+        padding: 0rem 1.2rem 1.5rem 1.2rem;
+      }
+      .school-info {
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 0.8rem 1rem;
+      }
+      .theme-toggle {
+        top: 10px;
+        right: 10px;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+      }
+      .petal-toggle {
+        bottom: 15px;
+        right: 15px;
+        padding: 8px 16px;
+        font-size: 0.8rem;
+      }
+      .gender-info {
+        font-size: 0.7rem;
+        gap: 0.6rem;
+      }
+    }
+
+    /* Toast message */
+    .toast-msg {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1f2e3a;
+      color: white;
+      padding: 8px 18px;
+      border-radius: 60px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      z-index: 1001;
+      backdrop-filter: blur(12px);
+      background: rgba(0,0,0,0.8);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 500px) {
+      .toast-msg {
+        white-space: nowrap;
+        font-size: 0.7rem;
+        bottom: 75px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="petalCanvas"></canvas>
+
+<!-- Nút Dark/Light Mode -->
+<div class="theme-toggle" id="themeToggle">
+  <i class="fas fa-moon"></i>
+  <span id="themeText">Dark Mode</span>
+</div>
+
+<!-- Nút bật/tắt hoa đào -->
+<div class="petal-toggle" id="petalToggle">
+  <i class="fas fa-fan"></i>
+  <span id="petalText">Bật Hoa Đào</span>
+</div>
+
+<div class="profile-card">
+  <div class="hero">
+    <div class="badge-school">Profile</div>
+    
+    <!-- Avatar với ảnh -->
+    <div class="avatar">
+      <img src="avatar.jpg" alt="Avatar" id="avatarImg" onerror="handleImageError()">
+      <i class="fas fa-graduation-cap fallback-icon"></i>
+    </div>
+    
+    <div class="name-container">
+      <h1>HOÀNG MẠNH PHƯỚC</h1>
+      <div class="verified-badge">
+        <i class="fas fa-check-circle"></i>
+      </div>
+    </div>
+    
+    <!-- Gender Info Row -->
+    <div class="gender-info">
+      <div class="gender-item">
+        <i class="fas fa-venus-mars"></i>
+        <span class="label">Giới tính:</span>
+        <span class="value">Nam / Male</span>
+      </div>
+      <div class="gender-item">
+        <i class="fas fa-rainbow"></i>
+        <span class="label">Bản dạng giới:</span>
+        <span class="value">Phi nhị nguyên 🌈</span>
+      </div>
+    </div>
+    
+    <div class="decrypt-container">
+      <div class="student-id" id="decryptText">🎓 Năm Sinh: 2009 | Khóa K56</div>
+    </div>
+    <p>Trường THPT Kim Xuyên · Tỉnh Tuyên Quang</p>
+  </div>
+
+  <div class="school-info">
+    <div class="info-item"><i class="fas fa-school"></i> <span>THPT KIM XUYÊN</span></div>
+    <div class="info-item"><i class="fas fa-calendar-alt"></i> <span>Niên khóa 2025 - 2028</span></div>
+    <div class="info-item"><i class="fas fa-map-marker-alt"></i> <span>Tuyên Quang, Việt Nam</span></div>
+    <div class="info-item"><i class="fas fa-id-card"></i> <span>Lập Trình Viên Web</span></div>
+  </div>
+
+  <div class="content">
+    <div class="section-title">
+      <i class="fas fa-link" style="color:#e76f91"></i> 🌸 MẠNG XÃ HỘI & LIÊN KẾT 🌸
+    </div>
+    <div class="links-grid" id="linksContainer"></div>
+
+    <div class="contact-row">
+      <div class="contact-badge"><i class="fab fa-zalo" style="color:#0066FF;"></i> Zalo: 0985769526 <button class="btn-copy" data-copy="0985769526"><i class="far fa-copy"></i></button></div>
+      <div class="contact-badge"><i class="fas fa-phone-alt" style="color:#2ecc71;"></i> Call: +84985769526 <button class="btn-copy" data-copy="+84985769526"><i class="far fa-copy"></i></button></div>
+      <div class="contact-badge"><i class="fas fa-envelope" style="color:#e67e22;"></i> Email: profile@Education.zone.id <button class="btn-copy" data-copy="Profile@Education.zone.id"><i class="far fa-copy"></i></button></div>
+    </div>
+
+    <footer>
+      <i class="fas fa-globe-asia"></i> Trang web học sinh chính thức | Hoàng Mạnh Phước 🌈 Phi nhị nguyên<br>
+      Tương thích Safari & Chrome · Tích xanh xác thực
+    </footer>
+  </div>
+</div>
+
+<div id="toastMsg" class="toast-msg">📋 Đã sao chép!</div>
+
+<script>
+  // Xử lý lỗi ảnh - fallback về icon
+  function handleImageError() {
+    const img = document.getElementById('avatarImg');
+    const fallback = document.querySelector('.avatar .fallback-icon');
+    if (img && fallback) {
+      img.style.display = 'none';
+      fallback.style.display = 'block';
+    }
+  }
+
+  // Danh sách link
+  const linksData = [
+    { platform: "Facebook", handle: "Phuoc2k9evn", url: "https://facebook.com/Phuoc2k9evn", icon: "fab fa-facebook", color: "#1877F2" },
+    { platform: "TikTok", handle: "Phuoc2kkevn", url: "https://tiktok.com/@Phuoc2kkevn", icon: "fab fa-tiktok", color: "#000000" },
+    { platform: "X / Twitter", handle: "Phuoc2k9vn", url: "https://twitter.com/Phuoc2k9vn", icon: "fab fa-twitter", color: "#1DA1F2" },
+    { platform: "Email", handle: "profile@Education.zone.id", url: "mailto:Profile@Education.zone.id", icon: "fas fa-envelope", color: "#EA4335" },
+    { platform: "Zalo", handle: "0985769526", url: "https://zalo.me/0985769526", icon: "fab fa-zalo", color: "#0066FF" },
+    { platform: "Reddit", handle: "Phuoc2k9evn", url: "https://reddit.com/user/Phuoc2k9evn", icon: "fab fa-reddit-alien", color: "#FF4500" },
+    { platform: "Discord", handle: "Hoangmanhphuocnvqs", url: "https://discord.com/users/Hoangmanhphuocnvqs", icon: "fab fa-discord", color: "#5865F2" },
+    { platform: "GitHub", handle: "Swapper2929", url: "https://github.com/Swapper2929", icon: "fab fa-github", color: "#171515" },
+    { platform: "HentaiZ", handle: "Phuoc2kxevn", url: "https://hentaiz3.com/profile/phuoc2kxevn", icon: "fas fa-heart", color: "#FF1493" },
+    { platform: "Osu!", handle: "Phuoc2k9evn", url: "https://osu.ppy.sh/users/Phuoc2k9evn", icon: "fas fa-gamepad", color: "#FF66AA" },
+    { platform: "Call / Phone", handle: "+84985769526", url: "tel:+84985769526", icon: "fas fa-phone-alt", color: "#34B7F1" }
+  ];
+
+  // Tạo link grid
+  const container = document.getElementById('linksContainer');
+  if (container) {
+    linksData.forEach((link, index) => {
+      const linkItem = document.createElement('a');
+      linkItem.className = 'link-item';
+      linkItem.href = link.url;
+      linkItem.target = '_blank';
+      linkItem.rel = 'noopener noreferrer';
+      linkItem.style.animation = `fadeInItem 0.4s ease forwards ${1.1 + index * 0.05}s`;
+      
+      const iconDiv = document.createElement('div');
+      iconDiv.className = 'link-icon';
+      const iconElem = document.createElement('i');
+      iconElem.className = link.icon;
+      iconElem.style.color = link.color;
+      iconDiv.appendChild(iconElem);
+      
+      const infoDiv = document.createElement('div');
+      infoDiv.className = 'link-info';
+      const platformSpan = document.createElement('div');
+      platformSpan.className = 'link-platform';
+      platformSpan.innerText = link.platform;
+      const handleSpan = document.createElement('div');
+      handleSpan.className = 'link-handle';
+      handleSpan.innerText = link.handle;
+      infoDiv.appendChild(platformSpan);
+      infoDiv.appendChild(handleSpan);
+      
+      const arrowSpan = document.createElement('div');
+      arrowSpan.className = 'link-arrow';
+      arrowSpan.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      
+      linkItem.appendChild(iconDiv);
+      linkItem.appendChild(infoDiv);
+      linkItem.appendChild(arrowSpan);
+      
+      container.appendChild(linkItem);
+    });
+  }
+
+  // Dark/Light Mode
+  const themeToggle = document.getElementById('themeToggle');
+  const themeText = document.getElementById('themeText');
+  const themeIcon = themeToggle.querySelector('i');
+  
+  let isDark = localStorage.getItem('theme') === 'dark';
+  
+  function setTheme(dark) {
+    if (dark) {
+      document.body.classList.add('dark');
+      themeText.innerText = 'Light Mode';
+      themeIcon.className = 'fas fa-sun';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark');
+      themeText.innerText = 'Dark Mode';
+      themeIcon.className = 'fas fa-moon';
+      localStorage.setItem('theme', 'light');
+    }
+    isDark = dark;
+  }
+  
+  if (isDark) setTheme(true);
+  else setTheme(false);
+  
+  themeToggle.addEventListener('click', () => {
+    setTheme(!isDark);
+    themeToggle.style.transform = 'scale(0.95)';
+    setTimeout(() => { themeToggle.style.transform = ''; }, 200);
+  });
+
+  // Hoa đào rơi control (mặc định TẮT)
+  const canvas = document.getElementById('petalCanvas');
+  let ctx = canvas.getContext('2d');
+  let petals = [];
+  let animationId = null;
+  let canvasWidth, canvasHeight;
+  let isPetalActive = false;
+
+  const petalToggleBtn = document.getElementById('petalToggle');
+  const petalText = document.getElementById('petalText');
+  const petalIcon = petalToggleBtn.querySelector('i');
+
+  function resizeCanvas() {
+    canvasWidth = window.innerWidth;
+    canvasHeight = window.innerHeight;
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+  }
+
+  class Petal {
+    constructor() {
+      this.x = Math.random() * canvasWidth;
+      this.y = Math.random() * canvasHeight - canvasHeight;
+      this.size = 8 + Math.random() * 12;
+      this.speedY = 1 + Math.random() * 2.5;
+      this.speedX = -0.5 + Math.random() * 1;
+      this.rotation = Math.random() * Math.PI * 2;
+      this.rotationSpeed = -0.02 + Math.random() * 0.04;
+      this.opacity = 0.6 + Math.random() * 0.4;
+      this.color = `rgba(255, ${150 + Math.random() * 80}, ${180 + Math.random() * 75}, ${this.opacity})`;
+    }
+
+    update() {
+      this.y += this.speedY;
+      this.x += this.speedX;
+      this.rotation += this.rotationSpeed;
+      
+      if (this.y > canvasHeight + 50) {
+        this.y = -50;
+        this.x = Math.random() * canvasWidth;
+      }
+      if (this.x > canvasWidth + 50) this.x = -50;
+      if (this.x < -50) this.x = canvasWidth + 50;
+    }
+
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.beginPath();
+      for (let i = 0; i < 5; i++) {
+        const angle = (i / 5) * Math.PI * 2;
+        const x1 = Math.cos(angle) * this.size * 0.6;
+        const y1 = Math.sin(angle) * this.size * 0.4;
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(x1 * 1.2, y1 * 1.2, x1, y1);
+      }
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0, 0, this.size * 0.2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 215, 0, 0.8)`;
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function initPetals(count = 55) {
+    petals = [];
+    for (let i = 0; i < count; i++) {
+      petals.push(new Petal());
+    }
+  }
+
+  function animatePetals() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    for (let petal of petals) {
+      petal.update();
+      petal.draw();
+    }
+    animationId = requestAnimationFrame(animatePetals);
+  }
+
+  function startPetals() {
+    if (animationId) return;
+    resizeCanvas();
+    initPetals(60);
+    animatePetals();
+  }
+
+  function stopPetals() {
+    if (animationId) {
+      cancelAnimationFrame(animationId);
+      animationId = null;
+    }
+    if (ctx) {
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    }
+  }
+
+  function togglePetals() {
+    if (isPetalActive) {
+      stopPetals();
+      petalToggleBtn.classList.remove('active');
+      petalText.innerText = 'Bật Hoa Đào';
+      petalIcon.className = 'fas fa-fan';
+      showToast('🌸 Đã tắt hoa đào');
+    } else {
+      startPetals();
+      petalToggleBtn.classList.add('active');
+      petalText.innerText = 'Tắt Hoa Đào';
+      petalIcon.className = 'fas fa-flower';
+      showToast('🌸 Hoa đào đang rơi!');
+    }
+    isPetalActive = !isPetalActive;
+  }
+
+  petalToggleBtn.addEventListener('click', () => {
+    togglePetals();
+    petalToggleBtn.style.transform = 'scale(0.95)';
+    setTimeout(() => { petalToggleBtn.style.transform = ''; }, 200);
+  });
+
+  window.addEventListener('resize', () => {
+    if (isPetalActive) {
+      resizeCanvas();
+      initPetals(60);
+    } else {
+      resizeCanvas();
+      if (ctx) ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    }
+  });
+
+  resizeCanvas();
+  if (ctx) ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+  // Decrypt text effect
+  const originalDecryptText = "🎓 Năm Sinh: 2009 | Khóa K56";
+  const decryptElement = document.getElementById('decryptText');
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+{}[]|;:,.<>?~`';
+  
+  async function decryptTextEffect(element, targetText, duration = 1500) {
+    const steps = 35;
+    const stepTime = duration / steps;
+    let currentStep = 0;
+    
+    function getRandomChar() {
+      return chars[Math.floor(Math.random() * chars.length)];
+    }
+    
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        currentStep++;
+        const progress = currentStep / steps;
+        let displayText = '';
+        
+        for (let i = 0; i < targetText.length; i++) {
+          if (Math.random() < progress || currentStep >= steps - 2) {
+            displayText += targetText[i];
+          } else {
+            displayText += getRandomChar();
+          }
+        }
+        
+        element.textContent = displayText;
+        
+        if (currentStep >= steps) {
+          clearInterval(interval);
+          element.textContent = targetText;
+          resolve();
+        }
+      }, stepTime);
+    });
+  }
+  
+  setTimeout(() => {
+    decryptTextEffect(decryptElement, originalDecryptText, 1500);
+  }, 400);
+
+  // Copy functionality
+  const toast = document.getElementById('toastMsg');
+  let toastTimeout;
+  
+  function showToast(message = "📋 Đã sao chép!") {
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toast.style.opacity = '1';
+    toast.innerText = message;
+    toastTimeout = setTimeout(() => {
+      toast.style.opacity = '0';
+    }, 1800);
+  }
+  
+  document.querySelectorAll('.btn-copy').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const copyText = btn.getAttribute('data-copy');
+      if (copyText) {
+        navigator.clipboard.writeText(copyText).then(() => {
+          showToast(`✅ Đã sao: ${copyText.length > 20 ? copyText.substring(0,18)+'…' : copyText}`);
+        }).catch(() => {
+          const textarea = document.createElement('textarea');
+          textarea.value = copyText;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+          showToast(`📋 Sao chép: ${copyText.length > 20 ? copyText.substring(0,18)+'…' : copyText}`);
+        });
+      }
+    });
+  });
+
+  console.log("Student Profile Ready - Avatar ảnh, tích xanh, phi nhị nguyên");
+</script>
+</body>
+</html>
